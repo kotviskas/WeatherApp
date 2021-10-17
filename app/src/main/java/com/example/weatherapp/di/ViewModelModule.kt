@@ -13,10 +13,3 @@ val viewModelModule = module {
         CityViewModel()
     }
 }
-
-
-
-
-
-
-
