@@ -16,7 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapsFragment : Fragment(R.layout.fragment_maps) {
 
-    private lateinit var _binding: FragmentMapsBinding
+    private lateinit var binding: FragmentMapsBinding
 
     private val viewModel by viewModel<MapsViewModel>()
 
@@ -31,8 +31,8 @@ class MapsFragment : Fragment(R.layout.fragment_maps) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMapsBinding.inflate(inflater, container, false)
-        return _binding.root
+        binding = FragmentMapsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

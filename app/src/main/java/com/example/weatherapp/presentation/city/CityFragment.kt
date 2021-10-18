@@ -10,7 +10,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CityFragment : Fragment() {
 
-    private lateinit var _binding: FragmentCityBinding
+    private lateinit var binding: FragmentCityBinding
 
     private val viewModel by viewModel<CityViewModel>()
 
@@ -22,8 +22,8 @@ class CityFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCityBinding.inflate(inflater, container, false)
-        return _binding.root
+        binding = FragmentCityBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 }

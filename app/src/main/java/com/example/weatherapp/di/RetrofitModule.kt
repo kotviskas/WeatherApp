@@ -5,13 +5,13 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
-import retrofit2.Converter
 import retrofit2.Retrofit
 
 val retrofitModule = module {
 
-    fun provideGson(): Converter.Factory {
-        return Json.asConverterFactory("application/json".toMediaType())
+    fun provideJson() = Json {
+        ignoreUnknownKeys = true
+        encodeDefaults = false
     }
 
     fun provideHttpClient(): OkHttpClient {
@@ -19,14 +19,18 @@ val retrofitModule = module {
         return okHttpClientBuilder.build()
     }
 
-    fun provideRetrofit(factory: Converter.Factory, client: OkHttpClient): Retrofit =
+    fun provideRetrofit(json: Json, client: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .baseUrl("BuildConfig.BASE_URL")
-            .addConverterFactory(factory)
+            .addConverterFactory(
+                json.asConverterFactory(
+                    "application/json".toMediaType()
+                )
+            )
             .client(client)
             .build()
 
-    single { provideGson() }
+    single { provideJson() }
     single { provideHttpClient() }
     single { provideRetrofit(get(), get()) }
 }
