@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -32,6 +33,10 @@ class MapsFragment : Fragment(R.layout.fragment_maps) {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMapsBinding.inflate(inflater, container, false)
+        binding.btnShowWeather.setOnClickListener {
+            val action = MapsFragmentDirections.actionMapsFragmentToCityFragment()
+            findNavController().navigate(action)
+        }
         return binding.root
     }
 
