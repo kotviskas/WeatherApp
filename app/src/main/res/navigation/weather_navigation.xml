@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_cityFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <argument
+            android:name="cityName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
