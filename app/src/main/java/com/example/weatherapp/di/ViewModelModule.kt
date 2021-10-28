@@ -10,6 +10,6 @@ val viewModelModule = module {
         MapsViewModel()
     }
     viewModel {
-        CityViewModel(get(), get())
+        CityViewModel(get())
     }
 }
