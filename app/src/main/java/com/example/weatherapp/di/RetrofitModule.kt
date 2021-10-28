@@ -3,7 +3,7 @@ package com.example.weatherapp.di
 import com.example.weatherapp.BuildConfig
 import com.example.weatherapp.R
 import com.example.weatherapp.data.network.AuthInterceptor
-import com.example.weatherapp.data.network.ResponseHandler
+import com.example.weatherapp.data.network.ExceptionInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -22,10 +22,14 @@ val retrofitModule = module {
 
     fun provideHttpClient(
         authInterceptor: AuthInterceptor,
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        exceptionInterceptor: ExceptionInterceptor
     ): OkHttpClient {
         val okHttpClientBuilder = OkHttpClient.Builder().addInterceptor(authInterceptor)
-            .addInterceptor(loggingInterceptor)
+            .addInterceptor(exceptionInterceptor)
+        if (BuildConfig.DEBUG) {
+            okHttpClientBuilder.addInterceptor(loggingInterceptor)
+        }
         return okHttpClientBuilder.build()
     }
 
@@ -47,9 +51,9 @@ val retrofitModule = module {
     }
 
     single { provideJson() }
-    single { provideHttpClient(get(), get()) }
+    single { provideHttpClient(get(), get(), get()) }
     single { provideRetrofit(get(), get()) }
     single { AuthInterceptor(androidContext().getString(R.string.weather_api_key)) }
-    single { ResponseHandler() }
+    factory { ExceptionInterceptor() }
     factory { provideLoggingInterceptor() }
 }

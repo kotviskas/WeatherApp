@@ -29,15 +29,19 @@ class CityFragment : Fragment(R.layout.fragment_city) {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCityBinding.inflate(inflater, container, false)
-        viewModel.weather.observe(viewLifecycleOwner, {
+        viewModel.weather.observe(viewLifecycleOwner) {
             binding.tvCityTest.text = it.temp.toString()
-        })
-        viewModel.apiError.observe(viewLifecycleOwner,{
-            Toast.makeText(requireContext(),it,Toast.LENGTH_LONG).show()
-        })
-        viewModel.internetError.observe(viewLifecycleOwner,{
-            Toast.makeText(requireContext(),getString(R.string.no_internet_error),Toast.LENGTH_LONG).show()
-        })
+        }
+        viewModel.apiError.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
+        viewModel.internetError.observe(viewLifecycleOwner) {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.no_internet_error),
+                Toast.LENGTH_LONG
+            ).show()
+        }
         return binding.root
     }
 }

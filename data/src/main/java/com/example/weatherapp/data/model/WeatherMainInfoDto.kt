@@ -4,14 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Main(
+data class WeatherMainInfoDto(
     @SerialName("feels_like")
     val feelsLike: Double?,
-    @SerialName("humidity")
     val humidity: Double?,
-    @SerialName("pressure")
     val pressure: Double?,
-    @SerialName("temp")
     val temp: Double?,
     @SerialName("temp_max")
     val tempMax: Double?,

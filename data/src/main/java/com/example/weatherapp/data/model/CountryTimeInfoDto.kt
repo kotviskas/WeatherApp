@@ -1,18 +1,12 @@
 package com.example.weatherapp.data.model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Sys(
-    @SerialName("country")
+data class CountryTimeInfoDto(
     val country: String?,
-    @SerialName("id")
     val id: Int?,
-    @SerialName("sunrise")
     val sunrise: Int?,
-    @SerialName("sunset")
     val sunset: Int?,
-    @SerialName("type")
     val type: Int?
 )

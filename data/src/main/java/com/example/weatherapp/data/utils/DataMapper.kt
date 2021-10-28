@@ -1,9 +1,9 @@
 package com.example.weatherapp.data.utils
 
-import com.example.weatherapp.data.model.WeatherResponse
+import com.example.weatherapp.data.model.WeatherResponseDto
 import com.example.weatherapp.domain.model.Weather
 
-fun WeatherResponse.toWeather(): Weather = Weather(
+fun WeatherResponseDto.toWeather(): Weather = Weather(
     temp = main?.temp ?: 0.toDouble(),
     description = weather?.get(0)?.description ?: "description",
     humidity = main?.humidity ?: 0.toDouble(),
