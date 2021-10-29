@@ -34,7 +34,7 @@ class MapsFragment : Fragment(R.layout.fragment_maps) {
     ): View {
         binding = FragmentMapsBinding.inflate(inflater, container, false)
         binding.btnShowWeather.setOnClickListener {
-            val action = MapsFragmentDirections.actionMapsFragmentToCityFragment("Helsinki")
+            val action = MapsFragmentDirections.actionMapsFragmentToCityFragment(getString(R.string.test_city))
             findNavController().navigate(action)
         }
         return binding.root

@@ -8,7 +8,6 @@ import com.example.weatherapp.domain.usecase.GetWeatherByCityNameParams
 import com.example.weatherapp.domain.usecase.GetWeatherByCityNameUseCase
 import com.example.weatherapp.presentation.base.BaseViewModel
 import kotlinx.coroutines.launch
-import java.net.UnknownHostException
 
 class CityViewModel(
     private val getWeatherByCityNameUseCase: GetWeatherByCityNameUseCase
@@ -24,13 +23,7 @@ class CityViewModel(
 
     private suspend fun getWeatherSafeCall(cityName: String) {
         getWeatherByCityNameUseCase.invoke(GetWeatherByCityNameParams(cityName))
-            .onFailure {
-                if (it is UnknownHostException) {
-                    _internetError.call()
-                } else {
-                    _apiError.value = it.message
-                }
-            }
+            .onFailure { }
             .onSuccess { _weather.value = it }
     }
 }

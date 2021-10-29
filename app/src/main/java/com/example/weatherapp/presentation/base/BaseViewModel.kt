@@ -1,16 +1,17 @@
 package com.example.weatherapp.presentation.base
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 
 open class BaseViewModel : ViewModel() {
-    protected var _internetError = SingleLiveEvent<Boolean>()
-    var internetError: LiveData<Boolean> = _internetError
+    private var _internetError = SingleLiveEvent<Throwable>()
+    var internetError: LiveData<Throwable> = _internetError
 
-    protected var _apiError = SingleLiveEvent<String>()
-    var apiError: LiveData<String> = _apiError
+    fun <T> Result<T>.onFailure(action: (exception: Throwable) -> Unit): Result<T> {
+        exceptionOrNull()?.let {
+            action(it)
+            _internetError.value = it
+        }
+        return this
+    }
 }

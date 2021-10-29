@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentCityBinding
+import com.example.weatherapp.presentation.utils.ErrorUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CityFragment : Fragment(R.layout.fragment_city) {
@@ -32,15 +33,8 @@ class CityFragment : Fragment(R.layout.fragment_city) {
         viewModel.weather.observe(viewLifecycleOwner) {
             binding.tvCityTest.text = it.temp.toString()
         }
-        viewModel.apiError.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-        }
         viewModel.internetError.observe(viewLifecycleOwner) {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.no_internet_error),
-                Toast.LENGTH_LONG
-            ).show()
+            ErrorUtil.handleError(requireContext(),it)
         }
         return binding.root
     }
