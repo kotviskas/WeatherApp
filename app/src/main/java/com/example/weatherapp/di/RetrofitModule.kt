@@ -1,9 +1,15 @@
 package com.example.weatherapp.di
 
+import com.example.weatherapp.BuildConfig
+import com.example.weatherapp.R
+import com.example.weatherapp.data.network.AuthInterceptor
+import com.example.weatherapp.data.network.ExceptionInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
@@ -14,14 +20,22 @@ val retrofitModule = module {
         encodeDefaults = false
     }
 
-    fun provideHttpClient(): OkHttpClient {
-        val okHttpClientBuilder = OkHttpClient.Builder()
+    fun provideHttpClient(
+        authInterceptor: AuthInterceptor,
+        loggingInterceptor: HttpLoggingInterceptor,
+        exceptionInterceptor: ExceptionInterceptor
+    ): OkHttpClient {
+        val okHttpClientBuilder = OkHttpClient.Builder().addInterceptor(authInterceptor)
+            .addInterceptor(exceptionInterceptor)
+        if (BuildConfig.DEBUG) {
+            okHttpClientBuilder.addInterceptor(loggingInterceptor)
+        }
         return okHttpClientBuilder.build()
     }
 
     fun provideRetrofit(json: Json, client: OkHttpClient): Retrofit =
         Retrofit.Builder()
-            .baseUrl("BuildConfig.BASE_URL")
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(
                 json.asConverterFactory(
                     "application/json".toMediaType()
@@ -30,7 +44,16 @@ val retrofitModule = module {
             .client(client)
             .build()
 
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        val logger = HttpLoggingInterceptor()
+        logger.level = HttpLoggingInterceptor.Level.BODY
+        return logger
+    }
+
     single { provideJson() }
-    single { provideHttpClient() }
+    single { provideHttpClient(get(), get(), get()) }
     single { provideRetrofit(get(), get()) }
+    single { AuthInterceptor(androidContext().getString(R.string.weather_api_key)) }
+    factory { ExceptionInterceptor() }
+    factory { provideLoggingInterceptor() }
 }
